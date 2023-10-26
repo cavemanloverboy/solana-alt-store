@@ -119,7 +119,7 @@ impl Store {
     }
 }
 
-impl AddressLoader for Store {
+impl AddressLoader for &Store {
     fn load_addresses(
         self,
         lookups: &[MessageAddressTableLookup],
