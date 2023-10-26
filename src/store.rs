@@ -36,16 +36,17 @@ impl Store {
         if path.exists() {
             Self::load_from_path(path)
         } else {
-            Ok(Self::new_with_path(path))
+            Self::new_with_path(path)
         }
     }
 
     /// Create a new Store at the given path, assuming it does not already exist.
-    fn new_with_path(path: impl AsRef<Path>) -> Self {
-        Self {
+    fn new_with_path(path: impl AsRef<Path>) -> Result<Self, Box<dyn Error>> {
+        std::fs::write(path.as_ref(), &[])?; // Create the file
+        Ok(Self {
             path: path.as_ref().to_path_buf(),
             inner: StoreInner(HashMap::new()),
-        }
+        })
     }
 
     /// Load a Store from the given path, assuming it already exists.
