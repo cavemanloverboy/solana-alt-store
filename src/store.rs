@@ -43,10 +43,13 @@ impl Store {
     /// Create a new Store at the given path, assuming it does not already exist.
     fn new_with_path(path: impl AsRef<Path>) -> Result<Self, Box<dyn Error>> {
         std::fs::write(path.as_ref(), [])?; // Create the file
-        Ok(Self {
+        let store = Self {
             path: path.as_ref().to_path_buf(),
             inner: StoreInner(HashMap::new()),
-        })
+        };
+        // Save the empty store to disk so loading works later
+        store.save_to_path()?;
+        Ok(store)
     }
 
     /// Load a Store from the given path, assuming it already exists.
